@@ -8,4 +8,4 @@ getgenv().AbuseProtection = false
 getgenv().ExtraOptimizations = false
 getgenv().SelectedGuns = {"rifle", "aug", "flintlock"} -- rifle, aug, flintlock, lmg, db
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/farmoretype/Forsh/refs/heads/main/Loader"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/pocxd/ForshRemake/refs/heads/main/Loader"))()
