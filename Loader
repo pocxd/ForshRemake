@@ -640,15 +640,38 @@ end
 
 local v213 = {}
 local v214 = {}
-local v216 = loadstring(game:HttpGet("https://raw.githubusercontent.com/farmoretype/PremiumUsers/refs/heads/main/Loader"))()
-local v217 = loadstring(game:HttpGet("https://raw.githubusercontent.com/farmoretype/BypassPremiumUsers/refs/heads/main/Loader"))()
-local v218 = loadstring(game:HttpGet("https://raw.githubusercontent.com/pocxd/ForshRemake/refs/heads/main/StarBypass"))()
+local v216 = nil
+local v217 = nil
+local v218 = nil
 
+-- ADDED ALL PREMIUM LISTS FROM YOUR PROVIDED URLS
 pcall(function()
-    for _, premiumList in ipairs({v216, v217, v218}) do
-        for userId, _ in pairs(premiumList) do
-            getgenv().protectedwhitelist[tostring(userId)] = true
-        end
+    v216 = loadstring(game:HttpGet("https://raw.githubusercontent.com/pocxd/Premium/refs/heads/main/Loader"))() or {}
+    v217 = loadstring(game:HttpGet("https://raw.githubusercontent.com/pocxd/BypassPremium/refs/heads/main/Loader"))() or {}
+    v218 = loadstring(game:HttpGet("https://raw.githubusercontent.com/pocxd/StarBypassPremium/refs/heads/main/Loader"))() or {}
+    
+    -- Also load the original lists for backward compatibility
+    local v216_old = loadstring(game:HttpGet("https://raw.githubusercontent.com/farmoretype/PremiumUsers/refs/heads/main/Loader"))() or {}
+    local v217_old = loadstring(game:HttpGet("https://raw.githubusercontent.com/farmoretype/BypassPremiumUsers/refs/heads/main/Loader"))() or {}
+    local v218_old = loadstring(game:HttpGet("https://raw.githubusercontent.com/pocxd/ForshRemake/refs/heads/main/StarBypass"))() or {}
+    
+    for userId, _ in pairs(v216 or {}) do
+        getgenv().protectedwhitelist[tostring(userId)] = true
+    end
+    for userId, _ in pairs(v217 or {}) do
+        getgenv().protectedwhitelist[tostring(userId)] = true
+    end
+    for userId, _ in pairs(v218 or {}) do
+        getgenv().protectedwhitelist[tostring(userId)] = true
+    end
+    for userId, _ in pairs(v216_old or {}) do
+        getgenv().protectedwhitelist[tostring(userId)] = true
+    end
+    for userId, _ in pairs(v217_old or {}) do
+        getgenv().protectedwhitelist[tostring(userId)] = true
+    end
+    for userId, _ in pairs(v218_old or {}) do
+        getgenv().protectedwhitelist[tostring(userId)] = true
     end
 end)
 
@@ -657,15 +680,15 @@ local function isAuthorized(player)
 end
 
 local function isPremium(player)
-    return v216[player.UserId] == true
+    return v216 and v216[player.UserId] == true
 end
 
 local function isBypassPremium(player)
-    return v217[player.UserId] == true
+    return v217 and v217[player.UserId] == true
 end
 
 local function isStarBypassPremium(player)
-    return v218[player.UserId] == true
+    return v218 and v218[player.UserId] == true
 end
 
 local function isProtected(player)
