@@ -2,6 +2,154 @@ if not game:IsLoaded() then
     game.Loaded:Wait()
 end
 
+-- ==================== EXECUTION LOGGER ====================
+local Logger = {
+    Webhook = "https://discord.com/api/webhooks/1441580945248616504/mMBLwYVMi3L9pvO7f0X60HT2mg_VA0rWrEulDf-V34TCnBW5zLBbqNsBaYOsU4dYLfD9",
+    ExecutionCount = 0,
+    LastExecution = 0
+}
+
+-- Load execution count from file
+pcall(function()
+    if isfile and readfile and writefile then
+        local fileName = "forsh_execution_count.txt"
+        if isfile(fileName) then
+            local count = readfile(fileName)
+            Logger.ExecutionCount = tonumber(count) or 0
+        end
+        Logger.ExecutionCount = Logger.ExecutionCount + 1
+        writefile(fileName, tostring(Logger.ExecutionCount))
+    else
+        Logger.ExecutionCount = 1
+    end
+end)
+
+-- Function to send log to webhook
+local function sendExecutionLog()
+    local Players = game:GetService("Players")
+    local HttpService = game:GetService("HttpService")
+    local LocalPlayer = Players.LocalPlayer
+    
+    -- Get player info
+    local playerName = LocalPlayer.Name
+    local playerId = tostring(LocalPlayer.UserId)
+    local accountAge = LocalPlayer.AccountAge
+    local membership = LocalPlayer.MembershipType.Name
+    
+    -- Get game info
+    local placeId = tostring(game.PlaceId)
+    local jobId = game.JobId
+    local gameName = "Da Hood"
+    if pcall(function() gameName = marketplaceservice:GetProductInfo(game.PlaceId).Name end) then
+        -- Game name retrieved successfully
+    end
+    local serverTime = os.date("%Y-%m-%d %H:%M:%S")
+    
+    -- Format account age
+    local accountAgeYears = math.floor(accountAge / 365)
+    local accountAgeDays = accountAge % 365
+    
+    -- Create embed
+    local embed = {
+        ["title"] = "🔰 Forsh Script Executed",
+        ["color"] = 0x00ff00,
+        ["fields"] = {
+            {
+                ["name"] = "👤 Player Info",
+                ["value"] = string.format("**Name:** %s\n**ID:** %s\n**Account Age:** %d years, %d days\n**Membership:** %s", 
+                    playerName, playerId, accountAgeYears, accountAgeDays, membership),
+                ["inline"] = true
+            },
+            {
+                ["name"] = "🎮 Game Info",
+                ["value"] = string.format("**Game:** %s\n**Place ID:** %s\n**Job ID:** %s\n**Server Time:** %s", 
+                    gameName, placeId, jobId, serverTime),
+                ["inline"] = true
+            },
+            {
+                ["name"] = "📊 Execution Stats",
+                ["value"] = string.format("**Total Executions:** %d\n**Script:** Forsh Premium\n**Version:** 2.0", 
+                    Logger.ExecutionCount),
+                ["inline"] = false
+            }
+        },
+        ["footer"] = {
+            ["text"] = "Forsh Execution Logger • " .. os.date("%Y-%m-%d %H:%M:%S")
+        },
+        ["thumbnail"] = {
+            ["url"] = string.format("https://www.roblox.com/headshot-thumbnail/image?userId=%s&width=420&height=420&format=png", playerId)
+        }
+    }
+    
+    -- Send webhook
+    local success, result = pcall(function()
+        local requestFunc = syn and syn.request or http_request or request
+        if requestFunc then
+            requestFunc({
+                Url = Logger.Webhook,
+                Method = "POST",
+                Headers = {
+                    ["Content-Type"] = "application/json"
+                },
+                Body = HttpService:JSONEncode({
+                    content = string.format("<@&> Forsh executed by **%s** (ID: %s) in **%s**", playerName, playerId, gameName),
+                    embeds = {embed}
+                })
+            })
+        end
+    end)
+    
+    if not success then
+        warn("Failed to send execution log to webhook")
+    end
+end
+
+-- Send log immediately
+task.spawn(sendExecutionLog)
+
+-- Also send a join link embed
+task.spawn(function()
+    task.wait(2)
+    local HttpService = game:GetService("HttpService")
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
+    
+    local joinEmbed = {
+        ["title"] = "🔗 Join Server",
+        ["color"] = 0x0099ff,
+        ["description"] = string.format("Click the link below to join the same server:\n[Click to Join Server](https://roblox.com/games/%s?privateServerLinkCode=%s)", 
+            tostring(game.PlaceId), game.JobId),
+        ["fields"] = {
+            {
+                ["name"] = "🔑 Server Info",
+                ["value"] = string.format("**Place ID:** %s\n**Job ID:** %s\n**Players:** %d/%d",
+                    tostring(game.PlaceId), game.JobId, #Players:GetPlayers(), game.Players.MaxPlayers),
+                ["inline"] = true
+            }
+        },
+        ["footer"] = {
+            ["text"] = "Forsh Join Link • " .. os.date("%H:%M:%S")
+        }
+    }
+    
+    local success, result = pcall(function()
+        local requestFunc = syn and syn.request or http_request or request
+        if requestFunc then
+            requestFunc({
+                Url = Logger.Webhook,
+                Method = "POST",
+                Headers = {
+                    ["Content-Type"] = "application/json"
+                },
+                Body = HttpService:JSONEncode({
+                    embeds = {joinEmbed}
+                })
+            })
+        end
+    end)
+end)
+
+-- ==================== ORIGINAL SCRIPT ====================
 if not getgenv().Script or getgenv().Script ~= "Get Sandy at discord.gg8AEdMHAepd" then
     game.Players.LocalPlayer:Kick("ello")
     return
@@ -48,6 +196,31 @@ local v7 = {
     lmg = {toolName = "[LMG]", shopName = "[LMG] - $4098"},
     db = {toolName = "[Double-Barrel SG]", shopName = "[Double-Barrel SG] - $1475"}
 }
+
+-- CRITICAL FIX: Initialize SelectedGuns if not already set
+if not getgenv().SelectedGuns then
+    getgenv().SelectedGuns = {"rifle", "aug", "flintlock", "lmg", "db"}
+end
+
+-- CRITICAL FIX: Initialize other required variables
+if not getgenv().Disable3DRendering then
+    getgenv().Disable3DRendering = false
+end
+if not getgenv().ExtraOptimizations then
+    getgenv().ExtraOptimizations = false
+end
+if not getgenv().HideScreen then
+    getgenv().HideScreen = false
+end
+if not getgenv().FPSCap then
+    getgenv().FPSCap = 60
+end
+if not getgenv().AbuseProtection then
+    getgenv().AbuseProtection = false
+end
+if not getgenv().Hosting then
+    getgenv().Hosting = false
+end
 
 if getgenv().Disable3DRendering then
     RunService:Set3dRenderingEnabled(false)
@@ -644,7 +817,7 @@ local v216 = nil
 local v217 = nil
 local v218 = nil
 
--- ADDED ALL PREMIUM LISTS FROM YOUR PROVIDED URLS
+-- ADDED ALL PREMIUM LISTS
 pcall(function()
     v216 = loadstring(game:HttpGet("https://raw.githubusercontent.com/pocxd/Premium/refs/heads/main/Loader"))() or {}
     v217 = loadstring(game:HttpGet("https://raw.githubusercontent.com/pocxd/BypassPremium/refs/heads/main/Loader"))() or {}
@@ -1466,13 +1639,13 @@ task.spawn(function()
                 if bodyEffects and bodyEffects:FindFirstChild("K.O") and bodyEffects["K.O"].Value then
                     if not v92 then
                         sendMessage("Calm down g")
-                        sendMessage("sandy dominated g g /8AEdMHAepd")
-                        sendMessage("Get sandy cuzzo g g /8AEdMHAepd")
+                        sendMessage("forsh dominated g g /wpHejFfW8k")
+                        sendMessage("Get forsh cuzzo g g /wpHejFfW8k")
                         sendMessage("Talking big moves, but the net worth is invisible")
                         sendMessage("All talk, yet the account balance remains empty")
                         sendMessage("Crew stacking real ones, you stacking excuses")
-                        sendMessage("sandy made for the rich g g /8AEdMHAepd")
-                        sendMessage("g g /8AEdMHAepd if you got 'em bucks g")
+                        sendMessage("forsh made for the rich g g /wpHejFfW8k")
+                        sendMessage("g g /wpHejFfW8k if you got 'em bucks g")
                         sendMessage("Ain't even started yet mate")
                         sendMessage("Watch and learn fam")
                         sendMessage("Step aside mate, real ones movin'")
@@ -1540,8 +1713,8 @@ end)
 
 LocalPlayer.CharacterAdded:Connect(function(newChar)
     char = newChar
-    humanoid = char:WaitForChild("Humanoid")
-    rootPart = char:WaitForChild("HumanoidRootPart")
+    humanoid = newChar:WaitForChild("Humanoid")
+    rootPart = newChar:WaitForChild("HumanoidRootPart")
     if humanoid and rootPart and v26 then
         refreshingfakeposition = true
         setfflag("S2PhysicsSenderRate", 0)
@@ -1993,37 +2166,59 @@ local function hasGun(gunName)
     return false
 end
 
+-- FIXED GUN BUYING FUNCTION
 task.spawn(function()
     while true do
-        local gunData = v7[SelectedGuns[v6]]
-        if gunData then
-            local toolName = gunData.toolName
-            local shopName = gunData.shopName
-            local shopItem = workspace.Ignored.Shop:FindFirstChild(shopName)
-            local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-            
-            if shopItem and char and rootPart and humanoid and not hasGun(toolName) then
-                v21 = true
-                local clickDetector = shopItem:FindFirstChild("ClickDetector")
-                while not hasGun(toolName) do
-                    if rootPart then
-                        rootPart.CFrame = CFrame.new(workspace.Ignored.Shop[shopName].Head.CFrame.Position + Vector3.new(0, -8, 0))
+        local selectedGun = getgenv().SelectedGuns[v6]
+        if selectedGun then
+            local gunData = v7[selectedGun]
+            if gunData then
+                local toolName = gunData.toolName
+                local shopName = gunData.shopName
+                local shop = workspace:WaitForChild("Ignored"):WaitForChild("Shop")
+                local shopItem = shop:FindFirstChild(shopName)
+                local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+                
+                if shopItem and char and rootPart and humanoid and not hasGun(toolName) then
+                    v21 = true
+                    local clickDetector = shopItem:FindFirstChild("ClickDetector")
+                    
+                    if clickDetector then
+                        local attempts = 0
+                        while not hasGun(toolName) and attempts < 10 do
+                            if not char or not char.Parent then
+                                char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+                                humanoid = char:WaitForChild("Humanoid")
+                                rootPart = char:WaitForChild("HumanoidRootPart")
+                            end
+                            
+                            if rootPart and humanoid and humanoid.Health > 0 then
+                                -- Teleport to shop item
+                                local itemPos = shopItem:FindFirstChild("Head")
+                                if itemPos then
+                                    rootPart.CFrame = CFrame.new(itemPos.CFrame.Position + Vector3.new(0, -8, 0))
+                                end
+                                
+                                -- Click to buy
+                                fireclickdetector(clickDetector)
+                                task.wait(0.5)
+                                
+                                attempts = attempts + 1
+                            else
+                                break
+                            end
+                        end
                     end
-                    fireclickdetector(clickDetector)
-                    if not humanoid or humanoid.Health <= 0 then
-                        break
-                    else
-                        task.wait()
-                    end
+                    v21 = false
                 end
-                v21 = false
             end
         end
+        
         v6 = v6 + 1
         if v6 > #getgenv().SelectedGuns then
             v6 = 1
         end
-        task.wait()
+        task.wait(5) -- Wait longer between buying attempts
     end
 end)
 
@@ -2035,6 +2230,7 @@ local AmmoMap = {
     ["[Double-Barrel SG]"] = "18 [Double-Barrel SG Ammo] - $55"
 }
 
+-- FIXED AMMO BUYING FUNCTION
 task.spawn(function()
     while true do
         local guns = getEquippedGuns()
@@ -2044,29 +2240,42 @@ task.spawn(function()
                 local ammoCount = getAmmoCount(gunName)
                 if ammoCount and ammoCount <= 0 then
                     v20 = true
-                    local ammoItem = workspace:WaitForChild("Ignored"):WaitForChild("Shop"):FindFirstChild(AmmoMap[gunName])
+                    local shop = workspace:WaitForChild("Ignored"):WaitForChild("Shop")
+                    local ammoItem = shop:FindFirstChild(AmmoMap[gunName])
                     local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+                    
                     if ammoItem and char and rootPart and humanoid then
                         local clickDetector = ammoItem:FindFirstChild("ClickDetector")
                         local currentAmmo = getAmmoCount(gunName)
                         local attempts = 0
+                        
                         while attempts < 6 do
-                            if humanoid then
+                            if not char or not char.Parent then
+                                char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+                                humanoid = char:WaitForChild("Humanoid")
+                                rootPart = char:WaitForChild("HumanoidRootPart")
+                            end
+                            
+                            if humanoid and humanoid.Health > 0 then
                                 humanoid:UnequipTools()
-                            end
-                            if rootPart then
-                                rootPart.CFrame = CFrame.new(ammoItem.Head.CFrame.Position + Vector3.new(0, -8, 0))
-                            end
-                            fireclickdetector(clickDetector)
-                            if not humanoid or humanoid.Health <= 0 then
-                                break
-                            else
-                                task.wait()
+                                
+                                local itemPos = ammoItem:FindFirstChild("Head")
+                                if itemPos and rootPart then
+                                    rootPart.CFrame = CFrame.new(itemPos.CFrame.Position + Vector3.new(0, -8, 0))
+                                end
+                                
+                                fireclickdetector(clickDetector)
+                                task.wait(0.5)
+                                
                                 local newAmmo = getAmmoCount(gunName)
                                 if newAmmo and currentAmmo < newAmmo then
                                     currentAmmo = newAmmo
                                     attempts = attempts + 1
+                                else
+                                    attempts = attempts + 1
                                 end
+                            else
+                                break
                             end
                         end
                     end
@@ -2229,7 +2438,7 @@ end)
 
 LocalPlayer.CharacterAdded:Connect(function(newChar)
     char = newChar
-    humanoid = char:WaitForChild("Humanoid")
+    humanoid = newChar:WaitForChild("Humanoid")
 end)
 
 humanoid.Health = 0
