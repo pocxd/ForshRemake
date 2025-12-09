@@ -103,7 +103,7 @@ else
     getgenv().protectedwhitelist = {};
     getgenv().protectedwhitelist[Owner] = true;
     pcall(function() --[[ Line: 0 ]] --[[ Name:  ]]
-        local v37 = loadstring(game:HttpGet("https://raw.githubusercontent.com/ultimates7/BotWhitelist/refs/heads/main/Loader"))();
+        local v37 = loadstring(game:HttpGet("https://raw.githubusercontent.com/pocxd/BotWhitelist/refs/heads/main/Loader"))();
         for v38, _ in pairs(v37) do
             getgenv().protectedwhitelist[v38] = true;
         end;
