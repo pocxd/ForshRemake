@@ -1,42 +1,42 @@
 if not game:IsLoaded() then
-    game.Loaded:Wait();
-end;
-    marker = Instance.new("BoolValue");
-    marker.Name = "Executed";
-    marker.Parent = game:GetService("ServerStorage");
-    local l_Players_0 = game:GetService("Players");
-    local l_LocalPlayer_0 = l_Players_0.LocalPlayer;
-    local _ = game:GetService("UserInputService");
-    local v3 = {
-        [l_LocalPlayer_0.Name] = l_LocalPlayer_0.Name
-    };
-    local l_LocalPlayer_1 = l_Players_0.LocalPlayer;
-    if not l_LocalPlayer_1.Character then
-        local _ = l_LocalPlayer_1.CharacterAdded:Wait();
-    end;
-    local v6 = 1;
-    local v7 = {
-        rifle = {
-            toolName = "[Rifle]", 
-            shopName = "[Rifle] - $1694"
-        }, 
-        aug = {
-            toolName = "[AUG]", 
-            shopName = "[AUG] - $2131"
-        }, 
-        flintlock = {
-            toolName = "[Flintlock]", 
-            shopName = "[Flintlock] - $1421"
-        }, 
-        lmg = {
-            toolName = "[LMG]", 
-            shopName = "[LMG] - $4098"
-        }, 
-        db = {
-            toolName = "[Double-Barrel SG]", 
-            shopName = "[Double-Barrel SG] - $1475"
-        }
-    };
+    game.Loaded:Wait()
+end
+marker = Instance.new("BoolValue")
+marker.Name = "Executed"
+marker.Parent = game:GetService("ServerStorage")
+local l_Players_0 = game:GetService("Players")
+local l_LocalPlayer_0 = l_Players_0.LocalPlayer
+local _ = game:GetService("UserInputService")
+local v3 = {
+    [l_LocalPlayer_0.Name] = l_LocalPlayer_0.Name
+}
+local l_LocalPlayer_1 = l_Players_0.LocalPlayer
+if not l_LocalPlayer_1.Character then
+    local _ = l_LocalPlayer_1.CharacterAdded:Wait()
+end
+local v6 = 1
+local v7 = {
+    rifle = {
+        toolName = "[Rifle]", 
+        shopName = "[Rifle] - $1694"
+    }, 
+    aug = {
+        toolName = "[AUG]", 
+        shopName = "[AUG] - $2131"
+    }, 
+    flintlock = {
+        toolName = "[Flintlock]", 
+        shopName = "[Flintlock] - $1421"
+    }, 
+    lmg = {
+        toolName = "[LMG]", 
+        shopName = "[LMG] - $4098"
+    }, 
+    db = {
+        toolName = "[Double-Barrel SG]", 
+        shopName = "[Double-Barrel SG] - $1475"
+    }
+}
     local l_RunService_0 = game:GetService("RunService");
     if Disable3DRendering then
         l_RunService_0:Set3dRenderingEnabled(false);
