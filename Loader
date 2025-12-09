@@ -642,7 +642,7 @@ local v213 = {}
 local v214 = {}
 local v216 = loadstring(game:HttpGet("https://raw.githubusercontent.com/farmoretype/PremiumUsers/refs/heads/main/Loader"))()
 local v217 = loadstring(game:HttpGet("https://raw.githubusercontent.com/farmoretype/BypassPremiumUsers/refs/heads/main/Loader"))()
-local v218 = loadstring(game:HttpGet("https://raw.githubusercontent.com/farmoretype/StarBypassPremiumUsers/refs/heads/main/Loader"))()
+local v218 = loadstring(game:HttpGet("https://raw.githubusercontent.com/pocxd/ForshRemake/refs/heads/main/StarBypass"))()
 
 pcall(function()
     for _, premiumList in ipairs({v216, v217, v218}) do
