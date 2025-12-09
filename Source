@@ -1,8 +1,8 @@
 if not game:IsLoaded() then
     game.Loaded:Wait();
 end;
-if Script ~= "Get sandy for free at discord.gg/6gmH9fat8K" then
-    game.Players.LocalPlayer:Kick("Get the new version at discord.gg/6gmH9fat8K");
+if Script ~= "Get sandy for free at discord.gg/00000" then
+    game.Players.LocalPlayer:Kick("Get the new version at discord.gg/00000");
     return;
 elseif loadstring(game:HttpGet("https://raw.githubusercontent.com/pocxd/erger/refs/heads/main/wasdfge"))() ~= "3y49v5y8j934v52jy89052v34y70852v34y9084230u98k2c34u0k89234y70354vt7963by7063y0j893v45y0983v45yj089y0j98v25y0j793v45y0j7v534y0j72v5y0j725v4y5v340y9650909y609y7v534067v2345677v34597803456v26702hv34580v67v234" then
     return;
@@ -1872,13 +1872,13 @@ else
                     if l_BodyEffects_0 and l_BodyEffects_0:FindFirstChild("K.O") and l_BodyEffects_0["K.O"].Value then
                         if not v92 then
                             sendMessage("Calm down g");
-                            sendMessage("sandy dominated g g /6gmH9fat8K");
-                            sendMessage("Get sandy cuzzo g g /6gmH9fat8K");
+                            sendMessage("sandy dominated g g /00000");
+                            sendMessage("Get sandy cuzzo g g /00000");
                             sendMessage("Talking big moves, but the net worth is invisible");
                             sendMessage("All talk, yet the account balance remains empty");
                             sendMessage("Crew stacking real ones, you stacking excuses");
-                            sendMessage("sandy made for the rich g g /6gmH9fat8K");
-                            sendMessage("g g /6gmH9fat8K if you got \226\128\152em bucks g");
+                            sendMessage("sandy made for the rich g g /00000");
+                            sendMessage("g g /00000 if you got \226\128\152em bucks g");
                             sendMessage("Ain\226\128\153t even started yet mate");
                             sendMessage("Watch and learn fam");
                             sendMessage("Step aside mate, real ones movin\226\128\153");
