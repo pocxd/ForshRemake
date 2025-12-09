@@ -1,7 +1,6 @@
 if not game:IsLoaded() then
     game.Loaded:Wait();
 end;
-
     marker = Instance.new("BoolValue");
     marker.Name = "Executed";
     marker.Parent = game:GetService("ServerStorage");
