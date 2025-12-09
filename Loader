@@ -1,3 +1,4 @@
+print("Loader")
 getgenv().Script = "Get Sandy at discord.gg/6gmH9fat8K"
 
 getgenv().Owner = "YOURROBLOXUSER"
